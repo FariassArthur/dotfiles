@@ -31,8 +31,6 @@ workspace 9 output $lm
 
 font pango:SymbolaRegular 9
 
-
-
 ##################################
 ########## KEY BINDINGS ##########
 ##################################
@@ -50,7 +48,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -i -p 'Apps '
+bindsym $mod+d exec dmenu_run
 #bindsym Shift+$mod+r exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-files
 #bindsym Shift+$mod+x exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-power
 #bindsym Shift+$mod+e exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-emojis
@@ -151,13 +149,13 @@ bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
  	position top
         status_command i3blocks
   colors { 
-  	 background #16161E
-	 statusline #ffffff
-	 separator #bbbbbb
+  	 background #191919
+	 statusline #E3651D
+	 separator #BED754
 
-	 focused_workspace  #345e81 #24415a #ffffff
-	 active_workspace   #345e81 #24415a #ffffff
-	 inactive_workspace #16161E #16161E #FFFFFF
+	 focused_workspace  #191919 #E3651D #BED754
+	 active_workspace   #345e81 #24415a #BED754
+	 inactive_workspace #191919 #191919 #BED754
 	 urgent_workspace   #C10004 #900000 #FFFFFF
 	 }
  }
@@ -168,17 +166,21 @@ bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
 ###################################
 
 
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 1
 new_window 1pixel
-client.focused #5c7e9a #5c7e9a #5c7e9a #5c7e9a   #742425
+client.focused #191919 #191919 #191919 #191919   #E3651D
 
 ##################################
 ############## GAPS ##############
 ##################################
 
-gaps inner 5
+gaps inner 2
 gaps outer 0
 
-#startup programs
+##################################
+############## EXEC ##############
+##################################
+
 exec --no-startup-id pipewire-pulse
-exec --no-startup-id code
+exec --no-startup-id code --restore
+exec --no-startup-id nitrogen --restore
