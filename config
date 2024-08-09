@@ -1,0 +1,34 @@
+# Global properties
+separator=true
+separator_block_width=15
+
+# Weather
+[weather]
+command=echo "🌤️ 25°C"
+interval=3600
+
+# Volume
+[volume]
+command=amixer get Master | grep 'Right:' | awk -F'[][]' '{ print "🔊 "$2 }'
+interval=1
+signal=1
+
+# Disk Usage
+[disk]
+command=df -h / | grep '/' | awk '{ print "💽 "$5 }'
+interval=30
+
+# CPU Usage
+[cpu_usage]
+command=top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print "💻 "100 - $1"%"}'
+interval=30
+
+# Memory Usage
+[memory]
+command=free -h | grep Mem | awk '{print "🧠 "$3 "/" $2}'
+interval=5
+
+# Time
+[time]
+command=date '+%d %b %Y, %a %H:%M '
+interval=1
