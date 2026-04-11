@@ -2,6 +2,7 @@
 ############# MODKEY #############
 ##################################
 
+# Set Mod key to Windows/Super key
 set $mod Mod4
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -11,9 +12,11 @@ floating_modifier $mod
 ############ MONITOR #############
 ##################################
 
+# Define monitor outputs
 set $rm HDMI-0
 set $lm DVI-D-0
 
+# Assign workspaces to outputs
 workspace 1 output $rm
 workspace 2 output $rm
 workspace 3 output $rm
@@ -24,22 +27,35 @@ workspace 7 output $lm
 workspace 8 output $lm
 workspace 9 output $lm
 
+# Enable automatic back-and-forth when switching to the current workspace
+workspace_auto_back_and_forth yes
 
 ##################################
 ############# FONTS ##############
 ##################################
 
-font pango:SymbolaRegular 9
+# Font for window titles and bar
+font pango:Cantarell, SymbolaRegular 10
 
 ##################################
 ########## KEY BINDINGS ##########
 ##################################
 
-bindsym $mod+f11 brightnessctl s 10%-
-bindsym $mod+f12 brightnessctl s 10%+
+# --- System Controls ---
 
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
+# Brightness controls (requires brightnessctl)
+bindsym $mod+f11 exec --no-startup-id brightnessctl s 10%-
+bindsym $mod+f12 exec --no-startup-id brightnessctl s 10%+
+
+# Volume controls (requires pactl - works with Pipewire/Pulse)
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Screenshot (requires scrot)
+bindsym $mod+Print exec --no-startup-id scrot '%Y-%m-%d-%@_scrot.png' -e 'mv $f ~/Pictures/'
+
+# --- Applications ---
 
 # start a terminal
 bindsym $mod+Return exec alacritty
@@ -54,8 +70,9 @@ bindsym $mod+d exec dmenu_run
 #bindsym Shift+$mod+e exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-emojis
 #bindsym Shift+$mod+p exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-src
 
+# --- Window Management ---
 
-# change focus
+# change focus (Vim-style)
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
@@ -67,7 +84,7 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# move focused window
+# move focused window (Vim-style)
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
@@ -78,6 +95,8 @@ bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
+
+# --- Layout ---
 
 # split in horizontal orientation
 bindsym $mod+h split h
@@ -105,6 +124,8 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
+# --- Workspaces ---
+
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -129,58 +150,110 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+# --- i3 Session Management ---
+
+# reload the configuration file
 bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session)
 bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
+# --- Window Resizing ---
 
-bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
-bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
-bindsym $mod+Ctrl+Down resize shrink height 1 px or 1 ppt
-bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
-
+# Resizing with keyboard (10px increments for speed)
+bindsym $mod+Ctrl+Right resize shrink width 10 px or 10 ppt
+bindsym $mod+Ctrl+Up resize grow height 10 px or 10 ppt
+bindsym $mod+Ctrl+Down resize shrink height 10 px or 10 ppt
+bindsym $mod+Ctrl+Left resize grow width 10 px or 10 ppt
 
 ###################################
 ############### BAR ###############
 ###################################
 
+# Nordic Dark Theme Colors
+set $nord0 #2E3440
+set $nord1 #3B4252
+set $nord2 #434C5E
+set $nord3 #4C566A
+set $nord4 #D8DEE9
+set $nord5 #E5E9F0
+set $nord6 #ECEFF4
+set $nord7 #8FBCBB
+set $nord8 #88C0D0
+set $nord9 #81A1C1
+set $nord10 #5E81AC
+set $nord11 #BF616A
+set $nord12 #D08770
+set $nord13 #EBCB8B
+set $nord14 #A3BE8C
+set $nord15 #B48EAD
 
- bar {  
- 	position top
-        status_command i3blocks
-  colors { 
-  	 background #191919
-	 statusline #E3651D
-	 separator #BED754
+bar {
+    position top
+    status_command i3blocks
+    tray_output primary
+    font pango:Cantarell, SymbolaRegular 10
 
-	 focused_workspace  #191919 #E3651D #BED754
-	 active_workspace   #345e81 #24415a #BED754
-	 inactive_workspace #191919 #191919 #BED754
-	 urgent_workspace   #C10004 #900000 #FFFFFF
-	 }
- }
+    colors {
+        background $nord0
+        statusline $nord4
+        separator  $nord2
 
+        # Color Class       | Border | Backgr | Text
+        focused_workspace    $nord8   $nord8   $nord0
+        active_workspace     $nord2   $nord2   $nord4
+        inactive_workspace   $nord0   $nord0   $nord4
+        urgent_workspace     $nord11  $nord11  $nord0
+        binding_mode         $nord13  $nord13  $nord0
+    }
+}
 
 ###################################
 ############# BORDERS #############
 ###################################
 
+# Window Border Configuration
+default_border pixel 1
+default_floating_border pixel 1
 
-for_window [class="^.*"] border pixel 1
-new_window 1pixel
-client.focused #191919 #191919 #191919 #191919   #E3651D
+# Hide borders adjacent to screen edges
+hide_edge_borders smart
+
+# Nordic Dark Window Colors
+# Color Class           | Border | Backgr | Text | Indicator | Child_Border
+client.focused          $nord8   $nord8   $nord0   $nord10     $nord8
+client.focused_inactive $nord2   $nord2   $nord4   $nord3      $nord2
+client.unfocused        $nord1   $nord1   $nord4   $nord1      $nord1
+client.urgent           $nord11  $nord11  $nord0   $nord11     $nord11
+client.placeholder      $nord0   $nord0   $nord4   $nord0      $nord0
+
+client.background       $nord0
 
 ##################################
 ############## GAPS ##############
 ##################################
 
-gaps inner 2
+gaps inner 8
 gaps outer 0
+
+##################################
+########### BEHAVIOR #############
+##################################
+
+# Disable focus follows mouse (avoids losing focus on multi-monitor)
+focus_follows_mouse no
 
 ##################################
 ############## EXEC ##############
 ##################################
 
+# Polkit agent (required for generic graphical authentication)
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+# Core services
 exec --no-startup-id pipewire-pulse
+
+# Applications
 exec --no-startup-id code --restore
 exec --no-startup-id nitrogen --restore
