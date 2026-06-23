@@ -1,2 +1,11 @@
 https://docs.fedoraproject.org/en-US/quick-docs/installing-plugins-for-playing-movies-and-music/
 ------
+=== INSTALACAO
+nemo
+alacritty
+nitrogen
+gedit
+i3wm / i3
+rofi
+pipewire-pulse
+brightnessctl
