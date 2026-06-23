@@ -1,21 +1,17 @@
-##################################
-############# MODKEY #############
-##################################
-
+# ========================================
+# MODKEY
+# ========================================
 # Set Mod key to Windows/Super key
 set $mod Mod4
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-##################################
-############ MONITOR #############
-##################################
-
+# ========================================
+# MONITOR
+# ========================================
 # Define monitor outputs
 set $rm HDMI-0
 set $lm DVI-D-0
-
 # Assign workspaces to outputs
 workspace 1 output $rm
 workspace 2 output $rm
@@ -26,70 +22,55 @@ workspace 6 output $lm
 workspace 7 output $lm
 workspace 8 output $lm
 workspace 9 output $lm
-
 # Enable automatic back-and-forth when switching to the current workspace
 workspace_auto_back_and_forth yes
 
-##################################
-############# FONTS ##############
-##################################
-
+# ========================================
+# FONTS
+# ========================================
 # Font for window titles and bar
 font pango:Cantarell, SymbolaRegular 10
 
-##################################
-########## KEY BINDINGS ##########
-##################################
+# ========================================
+# KEY BINDINGS
+# ========================================
 
 # --- System Controls ---
-
 # Brightness controls (requires brightnessctl)
-bindsym $mod+f11 exec --no-startup-id brightnessctl s 10%-
-bindsym $mod+f12 exec --no-startup-id brightnessctl s 10%+
-
+bindsym $mod+F11 exec --no-startup-id brightnessctl s 10%-
+bindsym $mod+F12 exec --no-startup-id brightnessctl s 10%+
 # Volume controls (requires pactl - works with Pipewire/Pulse)
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-
 # Screenshot (requires scrot)
 bindsym $mod+Print exec --no-startup-id scrot '%Y-%m-%d-%@_scrot.png' -e 'mv $f ~/Pictures/'
 
 # --- Applications ---
-
 # start a terminal
 bindsym $mod+Return exec alacritty
-
 # kill focused window
 bindsym $mod+Shift+q kill
-
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
-#bindsym Shift+$mod+r exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-files
-#bindsym Shift+$mod+x exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-power
-#bindsym Shift+$mod+e exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-emojis
-#bindsym Shift+$mod+p exec /home/arthurfarias/.config/Scripts/dmenu/dmenu-src
+bindsym $mod+Shift+d exec dmenu_run
+bindsym $mod+d exec --no-startup-id "rofi -modi drun,run -show drun"
 
 # --- Window Management ---
-
 # change focus (Vim-style)
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
-
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
-
 # move focused window (Vim-style)
-bindsym $mod+Shift+j move left
+bindsym $mod+Shifqt+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
-
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
@@ -97,35 +78,24 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # --- Layout ---
-
 # split in horizontal orientation
 bindsym $mod+h split h
-
 # split in vertical orientation
 bindsym $mod+v split v
-
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
-
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
-
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
-
 # focus the parent container
 bindsym $mod+a focus parent
 
-# focus the child container
-#bindsym $mod+d focus child
-
 # --- Workspaces ---
-
 # switch to workspace
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -137,7 +107,6 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
-
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
@@ -150,8 +119,11 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
-# --- i3 Session Management ---
+# --- Scratchpad ---
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
 
+# --- i3 Session Management ---
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session)
@@ -160,17 +132,18 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # --- Window Resizing ---
-
 # Resizing with keyboard (10px increments for speed)
 bindsym $mod+Ctrl+Right resize shrink width 10 px or 10 ppt
 bindsym $mod+Ctrl+Up resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+Down resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+Left resize grow width 10 px or 10 ppt
 
-###################################
-############### BAR ###############
-###################################
+# --- Quick Reload (Mod+Shift+R already taken, use Mod+Ctrl+R instead)
+# bindsym $mod+Ctrl+r restart
 
+# ========================================
+# BAR
+# ========================================
 # Nordic Dark Theme Colors
 set $nord0 #2E3440
 set $nord1 #3B4252
@@ -188,18 +161,15 @@ set $nord12 #D08770
 set $nord13 #EBCB8B
 set $nord14 #A3BE8C
 set $nord15 #B48EAD
-
 bar {
     position top
     status_command i3blocks
     tray_output primary
     font pango:Cantarell, SymbolaRegular 10
-
     colors {
         background $nord0
         statusline $nord4
         separator  $nord2
-
         # Color Class       | Border | Backgr | Text
         focused_workspace    $nord8   $nord8   $nord0
         active_workspace     $nord2   $nord2   $nord4
@@ -209,17 +179,14 @@ bar {
     }
 }
 
-###################################
-############# BORDERS #############
-###################################
-
+# ========================================
+# BORDERS
+# ========================================
 # Window Border Configuration
 default_border pixel 1
 default_floating_border pixel 1
-
 # Hide borders adjacent to screen edges
 hide_edge_borders smart
-
 # Nordic Dark Window Colors
 # Color Class           | Border | Backgr | Text | Indicator | Child_Border
 client.focused          $nord8   $nord8   $nord0   $nord10     $nord8
@@ -227,33 +194,30 @@ client.focused_inactive $nord2   $nord2   $nord4   $nord3      $nord2
 client.unfocused        $nord1   $nord1   $nord4   $nord1      $nord1
 client.urgent           $nord11  $nord11  $nord0   $nord11     $nord11
 client.placeholder      $nord0   $nord0   $nord4   $nord0      $nord0
-
 client.background       $nord0
 
-##################################
-############## GAPS ##############
-##################################
+# ========================================
+# GAPS
+# ========================================
+gaps inner 10
+gaps outer 2
+# Only show gaps when there are at least two windows on the workspace
+smart_gaps on
 
-gaps inner 8
-gaps outer 0
-
-##################################
-########### BEHAVIOR #############
-##################################
-
+# ========================================
+# BEHAVIOR
+# ========================================
 # Disable focus follows mouse (avoids losing focus on multi-monitor)
 focus_follows_mouse no
+# Smart borders - hide border when single window on workspace
+smart_borders on
 
-##################################
-############## EXEC ##############
-##################################
-
+# ========================================
+# EXEC
+# ========================================
 # Polkit agent (required for generic graphical authentication)
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-
 # Core services
 exec --no-startup-id pipewire-pulse
-
 # Applications
-exec --no-startup-id code --restore
 exec --no-startup-id nitrogen --restore
