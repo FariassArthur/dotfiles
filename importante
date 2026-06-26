@@ -10,3 +10,5 @@ rofi
 pipewire-pulse
 brightnessctl
 fonts-noto-color-emoji
+polybar
+psmisc
