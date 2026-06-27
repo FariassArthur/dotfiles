@@ -1,34 +1,60 @@
-# Global properties
-separator=true
-separator_block_width=15
+{
+    "layer": "top",
+    "position": "top",
+    "height": 32,
+    "spacing": 4,
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["clock"],
+    "modules-right": ["network#speed", "network#status", "cpu", "memory", "pulseaudio"],
+    
+"sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}"
+    },
 
-# Weather
-[weather]
-command=echo "🌤️ 25°C"
-interval=3600
+    "clock": {
+        "format": "󰃭 {:%d/%m/%Y   %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
 
-# Volume
-[volume]
-command=amixer get Master | grep 'Right:' | awk -F'[][]' '{ print "🔊 "$2 }'
-interval=1
-signal=1
+    "network#speed": {
+        "format-ethernet": " {bandidtw}  {banduwt}", // Mostra a taxa de download/upload atual
+        "format-wifi": " {bandidtw}  {banduwt}",
+        "interval": 2
+    },
 
-# Disk Usage
-[disk]
-command=df -h / | grep '/' | awk '{ print "💽 "$5 }'
-interval=30
+    "network#status": {
+        "interface": "enp*", // Ajuste se sua interface rede cabeada tiver outro padrão (ex: eth0)
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}", // Mostra IP e Máscara em formato CIDR (essencial para redes)
+        "format-wifi": " {essid} ({ipaddr})",
+        "format-disconnected": "󰈂 Desconectado",
+        "tooltip-format": "Placa: {ifname}\nGateway: {gwaddr}"
+    },
 
-# CPU Usage
-[cpu_usage]
-command=top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print "💻 "100 - $1"%"}'
-interval=30
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": true,
+        "interval": 2
+    },
 
-# Memory Usage
-[memory]
-command=free -h | grep Mem | awk '{print "🧠 "$3 "/" $2}'
-interval=5
+    "memory": {
+        "format": " {percentage}%",
+        "tooltip-format": "Usado: {used}GiB / Total: {total}GiB",
+        "interval": 2
+    },
 
-# Time
-[time]
-command=date '+%d %b %Y, %a %H:%M '
-interval=1
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 Muted",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    }
+}
