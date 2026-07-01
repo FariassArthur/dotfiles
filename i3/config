@@ -33,14 +33,20 @@ bindsym $mod+F11 exec --no-startup-id brightnessctl s 10%-
 bindsym $mod+F12 exec --no-startup-id brightnessctl s 10%+
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioPlay        exec --no-startup-id playerctl play-pause
-bindsym XF86AudioNext        exec --no-startup-id playerctl next
-bindsym XF86AudioPrev        exec --no-startup-id playerctl previous
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 
-# --- Screenshots ---
-bindsym Print       exec --no-startup-id scrot '%Y-%m-%d-%H%M%S_scrot.png' -e 'mv $f ~/Pictures/'
-bindsym $mod+Print  exec --no-startup-id scrot -s '%Y-%m-%d-%H%M%S_scrot.png' -e 'mv $f ~/Pictures/'
+# --- Controles de Brilho da Tela (ThinkPad T495) ---
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+
+
+# --- Screenshots (Flameshot) ---
+# Print: Abre o utilitário completo com a interface GUI na tela
+bindsym Print exec --no-startup-id flameshot gui
+# Mod+Print: Tira um print de tela inteira e salva direto na sua pasta padrão de imagens
+bindsym $mod+Print exec --no-startup-id flameshot full -p ~/Pictures/
 
 # --- Applications ---
 bindsym $mod+Return exec alacritty
@@ -56,20 +62,20 @@ bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
-bindsym $mod+Left   focus left
-bindsym $mod+Down   focus down
-bindsym $mod+Up     focus up
-bindsym $mod+Right  focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
 # --- Move Window (Vim-style) ---
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
-bindsym $mod+Shift+Left   move left
-bindsym $mod+Shift+Down   move down
-bindsym $mod+Shift+Up     move up
-bindsym $mod+Shift+Right  move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
 
 # --- Layout ---
 bindsym $mod+h split h
@@ -119,10 +125,10 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Sair do i3?' -b 'Sim, sair' 'i3-msg exit'"
 
 # --- Resize (10px increments) ---
-bindsym $mod+Ctrl+Right  resize shrink width 10 px or 10 ppt
-bindsym $mod+Ctrl+Up     resize grow height 10 px or 10 ppt
-bindsym $mod+Ctrl+Down   resize shrink height 10 px or 10 ppt
-bindsym $mod+Ctrl+Left   resize grow width 10 px or 10 ppt
+bindsym $mod+Ctrl+Right resize shrink width 10 px or 10 ppt
+bindsym $mod+Ctrl+Up resize grow height 10 px or 10 ppt
+bindsym $mod+Ctrl+Down resize shrink height 10 px or 10 ppt
+bindsym $mod+Ctrl+Left resize grow width 10 px or 10 ppt
 
 # --- Modo Redimensionamento Interativo ---
 mode "resize" {
@@ -130,9 +136,9 @@ mode "resize" {
     bindsym k resize grow height 10 px or 10 ppt
     bindsym l resize shrink height 10 px or 10 ppt
     bindsym semicolon resize grow width 10 px or 10 ppt
-    bindsym Left  resize shrink width 10 px or 10 ppt
-    bindsym Down  resize grow height 10 px or 10 ppt
-    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
     bindsym Right resize grow width 10 px or 10 ppt
     bindsym Escape mode default
     bindsym Return mode default
@@ -210,9 +216,15 @@ focus_on_window_activation urgent
 # AUTOSTART
 # ========================================
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-# exec --no-startup-id pipewire-pulse
 exec --no-startup-id nitrogen --restore
 
-# Inicialização inteligente do servidor de áudio
+# Inicialização inteligente do servidor de áudio e do daemon do Flameshot
+exec --no-startup-id flameshot
 exec --no-startup-id command -v pipewire-pulse >/dev/null && pipewire-pulse
 exec --no-startup-id command -v pulseaudio >/dev/null && pulseaudio --start
+
+# Iniciar os gestos do Touchpad
+exec --no-startup-id touchegg
+
+# Tirar bipe
+exec --no-startup-id xset b off

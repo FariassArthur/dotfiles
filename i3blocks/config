@@ -1,34 +1,59 @@
 # Global properties
 separator=true
-separator_block_width=15
+separator_block_width=20
+markup=pango
 
-# Weather
-[weather]
-command=echo "🌤️ 25°C"
-interval=3600
+# IP Local (Interface Ativa)
+[ip_local]
+label=🌐 
+command=ip route get 1.1.1.1 2>/dev/null | awk '{print $7}' || echo "Desconectado"
+interval=10
+color=#00FFCC
+
+# IP Público (Útil para checar VPN/Saída de internet)
+[ip_publico]
+label=🌍 
+command=curl -s https://ifconfig.me || echo "Offline"
+interval=300
+color=#FFB454
+
+# Tráfego de Rede (Download/Upload em tempo real)
+# Nota: Altere 'eth0' ou 'wlan0' para a sua interface principal se necessário
+[net_speed]
+label=⚡ 
+command=nmcli dev bandwidth 2>/dev/null || vnstat -tr 2 2>/dev/null | grep rx | awk '{print "↓"$2" "$3" ↑"}' # Alternativa simples caso tenha vnstat
+# Uma alternativa universal simples e rápida via proc/net/dev:
+command=awk '/enp|wlan|eth/ {rx=$2; tx=$10; sleep 1; awk -v rx=$rx -v tx=$tx "/enp|wlan|eth/ {print \"⬇ \"($2-rx)/1024\"k ⬆ \"($10-tx)/1024\"k\"}" /proc/net/dev}' /proc/net/dev
+interval=2
+
+# Uso de CPU
+[cpu_usage]
+label=💻 
+command=top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}'
+interval=5
+
+# Uso de Memória
+[memory]
+label=🧠 
+command=free -h | grep Mem | awk '{print $3}'
+interval=10
+
+# Bateria (Solicitado)
+[battery]
+label=🔋 
+command=acpi 2>/dev/null | grep -o '[0-9]*%' || upower -i $(upower -e | grep 'BAT') | grep -E "percentage" | awk '{print $2}'
+interval=30
+color=#1793D1
 
 # Volume
 [volume]
-command=amixer get Master | grep 'Right:' | awk -F'[][]' '{ print "🔊 "$2 }'
+label=🔊 
+command=amixer get Master | grep 'Right:' | awk -F'[][]' '{ print $2 }'
 interval=1
 signal=1
 
-# Disk Usage
-[disk]
-command=df -h / | grep '/' | awk '{ print "💽 "$5 }'
-interval=30
-
-# CPU Usage
-[cpu_usage]
-command=top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print "💻 "100 - $1"%"}'
-interval=30
-
-# Memory Usage
-[memory]
-command=free -h | grep Mem | awk '{print "🧠 "$3 "/" $2}'
-interval=5
-
-# Time
+# Hora e Data
 [time]
-command=date '+%d %b %Y, %a %H:%M '
-interval=1
+label=📅 
+command=date '+%d/%m %H:%M'
+interval=5
